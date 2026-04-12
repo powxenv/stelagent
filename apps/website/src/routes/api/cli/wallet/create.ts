@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { eq } from "drizzle-orm";
 import { randomBytes, scryptSync, createCipheriv, createDecipheriv } from "node:crypto";
 import { Keypair } from "@stellar/stellar-base";
-import { db, walletSessions, wallets } from "#/db/server.ts";
+import { walletSessions, wallets } from "#/db/schema";
+import { db } from "#/db/index.ts";
 
 export const Route = createFileRoute("/api/cli/wallet/create")({
   server: {
@@ -85,7 +86,11 @@ async function authenticate(request: Request): Promise<string | null> {
   return session.email;
 }
 
-function encryptSecretKey(secretKey: string): { encrypted: string; salt: string; iv: string } {
+function encryptSecretKey(secretKey: string): {
+  encrypted: string;
+  salt: string;
+  iv: string;
+} {
   const salt = randomBytes(16);
   const key = scryptSync(secretKey, salt, 32);
   const iv = randomBytes(16);

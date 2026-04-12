@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { eq } from "drizzle-orm";
 import { scryptSync, createDecipheriv } from "node:crypto";
-import { db, walletSessions, wallets } from "#/db/server.ts";
+import { walletSessions, wallets } from "#/db/schema";
+import { db } from "#/db/index.ts";
 
 export const Route = createFileRoute("/api/cli/wallet/")({
   server: {

@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <main className="inner">
-        <div className="py-30">
+        <div className="py-20 flex flex-col gap-8">
           <div className="grid grid-cols-2 gap-10 items-center">
             <h1 className="font-medium text-5xl leading-tight">
               Sell any digital product with micropayments.
@@ -16,6 +16,8 @@ function App() {
               Charge on Stellar. Pay per access, dynamic pricing, and analytics built in.
             </p>
           </div>
+
+          <div className="bg-[url(/hero.png)] bg-cover h-160 w-full"></div>
         </div>
       </main>
     </>

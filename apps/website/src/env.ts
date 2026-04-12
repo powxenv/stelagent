@@ -3,7 +3,6 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    SERVER_URL: z.url().optional(),
     NEON_DATABASE_URL: z.string(),
     NEON_DATA_API_URL: z.string(),
   },
@@ -16,7 +15,6 @@ export const env = createEnv({
 
   client: {
     VITE_APP_TITLE: z.string().min(1).optional(),
-    VITE_NEON_AUTH_URL: z.string(),
   },
 
   /**

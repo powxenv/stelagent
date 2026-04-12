@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { randomBytes } from "node:crypto";
-import { db, walletSessions } from "#/db/server.ts";
+import { walletSessions } from "#/db/schema";
+import { db } from "#/db/index.ts";
 
 export const Route = createFileRoute("/api/cli/auth/otp/verify")({
   server: {
