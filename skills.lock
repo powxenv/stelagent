@@ -1,0 +1,10 @@
+{
+  "skills": {
+    "skill:react-email": {
+      "name": "react-email",
+      "url": "https://github.com/resend/react-email.git",
+      "branch": "main",
+      "commit": "b4a91a67313d73668efbdf005a276cb240d2dc78"
+    }
+  }
+}

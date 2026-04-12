@@ -1,6 +1,6 @@
 import { defineCommand } from "citty";
 import { Effect } from "effect";
-import { AppLive } from "#/layers/app-layer.js";
+import { runApp } from "#/lib/run.js";
 import { OutputService } from "#/services/output.js";
 import { WalletClientService } from "#/services/wallet-client.js";
 
@@ -23,9 +23,7 @@ export const walletAddress = defineCommand({
       Effect.catchTag("WalletNotFoundError", () =>
         Effect.gen(function* () {
           const output = yield* OutputService;
-          yield* output.print(
-            output.err("No wallet found. Run `@centsh/agent wallet login` first."),
-          );
+          yield* output.print(output.err("No wallet found. Run `stecli wallet login` first."));
         }),
       ),
       Effect.catchTag("WalletFetchError", (e) =>
@@ -36,6 +34,6 @@ export const walletAddress = defineCommand({
       ),
     );
 
-    await Effect.runPromise(program.pipe(Effect.provide(AppLive)));
+    await runApp(program);
   },
 });

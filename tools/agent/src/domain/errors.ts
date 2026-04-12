@@ -48,3 +48,11 @@ export class PaymentSetupError extends Data.TaggedError("PaymentSetupError")<{
 export class InvalidNetworkError extends Data.TaggedError("InvalidNetworkError")<{
   readonly provided: string;
 }> {}
+
+export class HorizonError extends Data.TaggedError("HorizonError")<{
+  readonly cause: string;
+}> {}
+
+export class AuditError extends Data.TaggedError("AuditError")<{
+  readonly cause: string;
+}> {}

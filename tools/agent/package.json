@@ -1,10 +1,10 @@
 {
-  "name": "@centsh/agent",
+  "name": "stecli",
   "version": "0.1.0",
-  "description": "Agentic wallet CLI for Stellar with x402 payments",
+  "description": "Modular, agent-first CLI for Stellar — wallet, payments, markets, and DeFi",
   "license": "MIT",
   "bin": {
-    "centsh-agent": "./dist/index.mjs"
+    "stecli": "./dist/index.mjs"
   },
   "files": [
     "dist"

@@ -63,10 +63,12 @@ export function Commands() {
     <section className="inner py-28">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-16">
         <div className="md:col-span-5">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Built for agents.</h2>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+            Agents know what to do.
+          </h2>
           <p className="text-muted text-lg leading-relaxed mb-8">
-            Each command is a skill. Each skill declares trigger phrases so AI agents know exactly
-            when and how to invoke it. Run it from the terminal, or expose it as an MCP server.
+            Each command is a skill with declared trigger phrases. AI agents match intent to action
+            automatically, and&nbsp;expose the same surface as an MCP server for tool-use.
           </p>
 
           <div className="space-y-4">

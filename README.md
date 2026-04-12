@@ -1,29 +1,34 @@
-# Vite+ Monorepo Starter
+# stecli
 
-A starter for creating a Vite+ monorepo.
+Modular, agent-first CLI for Stellar — wallet, payments, markets, and DeFi.
+
+Stecli provides a skill-based command architecture for interacting with the Stellar network. It combines wallet management, x402 micropayments, Horizon API insights, and real-time monitoring into a single developer-friendly CLI.
+
+## Architecture
+
+- **`tools/cli/src/`** — CLI binary (`stecli`), built with citty + Effect-TS
+- **`apps/website/`** — TanStack Start web app (API server + dashboard)
+- **`skills/`** — Agent skill definitions (SKILL.md + CLI command references)
 
 ## Development
 
-- Check everything is ready:
-
 ```bash
+vp install
 vp run ready
-```
-
-- Run the tests:
-
-```bash
-vp run -r test
-```
-
-- Build the monorepo:
-
-```bash
-vp run -r build
-```
-
-- Run the development server:
-
-```bash
 vp run dev
+```
+
+## CLI Quick Start
+
+```bash
+stecli wallet login -e you@example.com
+stecli wallet balance
+stecli wallet transfer -t GDXXX... -a 10
+stecli pay https://api.example.com/premium
+```
+
+All commands output structured JSON:
+
+```json
+{ "ok": true, "data": { ... } }
 ```

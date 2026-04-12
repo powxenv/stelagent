@@ -2,28 +2,28 @@ import { Wallet, Brain, Zap, Radio } from "lucide-react";
 
 const features = [
   {
+    icon: Brain,
+    title: "Agent Skills",
+    description:
+      "Every command is a skill with trigger phrases. AI agents discover, route, and invoke the right tool automatically. No manual integration needed.",
+  },
+  {
     icon: Wallet,
     title: "Agentic Wallet",
     description:
-      "Login, manage, and transact on Stellar from your terminal. OTP authentication, balance checks, and transfers — no GUI needed.",
-  },
-  {
-    icon: Brain,
-    title: "AI Skills",
-    description:
-      "Skill-based architecture for agent discovery and routing. MCP-ready tools that any AI agent can invoke directly.",
+      "Login, balance, transfer. Agents manage wallets end to end. OTP auth, key management, and session persistence built in.",
   },
   {
     icon: Zap,
     title: "x402 Payments",
     description:
-      "Pay per API request with the HTTP 402 protocol. Micropayments on Stellar — fast, cheap, and agent-native.",
+      "Agents pay per API request via the HTTP 402 protocol. Micropayments on Stellar: fast, cheap, and built for machine-to-machine commerce.",
   },
   {
     icon: Radio,
     title: "Real-time Monitoring",
     description:
-      "Stream transactions, payments, and effects via Horizon SSE. Watch the network live, right from your terminal.",
+      "Stream transactions, payments, and effects via Horizon SSE. Agents watch the network and react to events as they happen.",
   },
 ];
 
@@ -32,12 +32,13 @@ export function Features() {
     <section className="inner py-28">
       <div className="mb-16">
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-          Everything you need
+          Built for agents,
           <br />
-          to work with Stellar.
+          usable by humans.
         </h2>
         <p className="text-muted text-lg max-w-lg">
-          One CLI. Wallet, payments, markets, monitoring, and agent integration.
+          Every capability is structured, typed, and documented so AI agents can use it without
+          hand-holding. You just run commands.
         </p>
       </div>
 

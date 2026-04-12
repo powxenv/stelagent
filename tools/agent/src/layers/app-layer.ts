@@ -4,6 +4,8 @@ import { SessionLive } from "#/services/session.js";
 import { AuthLive } from "#/services/auth.js";
 import { WalletClientLive } from "#/services/wallet-client.js";
 import { StellarLive } from "#/services/stellar.js";
+import { HorizonLive } from "#/services/horizon.js";
+import { AuditLive } from "#/services/audit.js";
 import { PaymentLive } from "#/services/payment.js";
 
 const BaseLive = Layer.merge(
@@ -11,8 +13,12 @@ const BaseLive = Layer.merge(
   Layer.merge(SessionLive, Layer.merge(AuthLive, StellarLive)),
 );
 
-const WithWallet = Layer.provide(WalletClientLive, BaseLive);
+const WithHorizon = Layer.merge(BaseLive, HorizonLive);
 
-const WithPayment = Layer.provide(PaymentLive, Layer.merge(BaseLive, WithWallet));
+const WithWallet = Layer.provide(WalletClientLive, WithHorizon);
 
-export const AppLive = Layer.merge(Layer.merge(BaseLive, WithWallet), WithPayment);
+const WithPayment = Layer.provide(PaymentLive, Layer.merge(WithHorizon, WithWallet));
+
+const WithAudit = Layer.provide(AuditLive, Layer.merge(WithHorizon, WithPayment));
+
+export const AppLive = WithAudit;

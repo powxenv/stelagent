@@ -1,6 +1,6 @@
 import { defineCommand } from "citty";
 import { Effect } from "effect";
-import { AppLive } from "#/layers/app-layer.js";
+import { runApp } from "#/lib/run.js";
 import { OutputService } from "#/services/output.js";
 import { SessionService } from "#/services/session.js";
 
@@ -23,6 +23,6 @@ export const walletLogout = defineCommand({
       ),
     );
 
-    await Effect.runPromise(program.pipe(Effect.provide(AppLive)));
+    await runApp(program);
   },
 });

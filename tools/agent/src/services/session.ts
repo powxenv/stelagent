@@ -5,8 +5,8 @@ import { Context, Effect, Layer } from "effect";
 import { SessionNotFoundError, SessionReadError, SessionWriteError } from "#/domain/errors.js";
 import type { SessionData } from "#/domain/types.js";
 
-const CENT_DIR = join(homedir(), ".cent");
-const SESSION_FILE = join(CENT_DIR, "session.json");
+const STECLI_DIR = join(homedir(), ".stecli");
+const SESSION_FILE = join(STECLI_DIR, "session.json");
 
 export class SessionService extends Context.Tag("SessionService")<
   SessionService,
@@ -21,7 +21,7 @@ export const SessionLive = Layer.succeed(SessionService, {
   save: (token: string, email: string) =>
     Effect.try({
       try: () => {
-        if (!existsSync(CENT_DIR)) mkdirSync(CENT_DIR, { recursive: true });
+        if (!existsSync(STECLI_DIR)) mkdirSync(STECLI_DIR, { recursive: true });
         writeFileSync(SESSION_FILE, JSON.stringify({ token, email }, null, 2), { mode: 0o600 });
       },
       catch: (e: unknown) => new SessionWriteError({ cause: String(e) }),

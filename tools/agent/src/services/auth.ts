@@ -2,7 +2,7 @@ import { Context, Effect, Layer } from "effect";
 import { AuthRequestError, OtpVerifyError } from "#/domain/errors.js";
 import type { OtpResponse, VerifyResponse } from "#/domain/types.js";
 
-const API_BASE_URL = "https://cent.dev";
+const API_BASE_URL = process.env.STECLI_API_URL ?? "https://stecli.dev";
 
 export class AuthService extends Context.Tag("AuthService")<
   AuthService,

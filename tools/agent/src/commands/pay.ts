@@ -1,6 +1,6 @@
 import { defineCommand } from "citty";
 import { Effect } from "effect";
-import { AppLive } from "#/layers/app-layer.js";
+import { runApp } from "#/lib/run.js";
 import { OutputService } from "#/services/output.js";
 import { PaymentService } from "#/services/payment.js";
 
@@ -27,9 +27,7 @@ export const payCommand = defineCommand({
         WalletNotFoundError: () =>
           Effect.gen(function* () {
             const output = yield* OutputService;
-            yield* output.print(
-              output.err("No wallet found. Run `@centsh/agent wallet login` first."),
-            );
+            yield* output.print(output.err("No wallet found. Run `stecli wallet login` first."));
           }),
         WalletFetchError: (e) =>
           Effect.gen(function* () {
@@ -51,6 +49,6 @@ export const payCommand = defineCommand({
       }),
     );
 
-    await Effect.runPromise(program.pipe(Effect.provide(AppLive)));
+    await runApp(program);
   },
 });

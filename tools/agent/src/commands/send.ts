@@ -4,34 +4,64 @@ import { runApp } from "#/lib/run.js";
 import { OutputService } from "#/services/output.js";
 import { WalletClientService } from "#/services/wallet-client.js";
 import { StellarService } from "#/services/stellar.js";
+import type { Network } from "#/domain/types.js";
 
-export const walletTransfer = defineCommand({
-  meta: { name: "transfer", description: "Send XLM to another address" },
+export const sendCommand = defineCommand({
+  meta: { name: "send", description: "Send a payment to another Stellar address" },
   args: {
-    to: {
-      type: "string",
+    destination: {
+      type: "positional",
       description: "Destination public key (G...)",
       required: true,
-      alias: ["t"],
     },
     amount: {
-      type: "string",
-      description: "Amount in XLM",
+      type: "positional",
+      description: "Amount to send",
       required: true,
+    },
+    asset: {
+      type: "string",
       alias: ["a"],
+      description: "Asset to send: 'native' (default) or 'CODE:ISSUER' for custom assets",
+      default: "native",
+    },
+    memo: {
+      type: "string",
+      alias: ["m"],
+      description: "Transaction memo (optional)",
+    },
+    network: {
+      type: "string",
+      alias: ["n"],
+      description: "Network: testnet or pubnet",
+      default: "testnet",
     },
   },
   async run({ args }) {
+    const network = args.network as Network;
+    if (network !== "testnet" && network !== "pubnet") {
+      console.log(
+        JSON.stringify(
+          { ok: false, error: "Invalid network. Must be 'testnet' or 'pubnet'." },
+          null,
+          2,
+        ),
+      );
+      return;
+    }
+
     const program = Effect.gen(function* () {
       const output = yield* OutputService;
       const walletClient = yield* WalletClientService;
       const stellar = yield* StellarService;
       const wallet = yield* walletClient.fetchWallet();
-      const result = yield* stellar.transferXlm(
+      const result = yield* stellar.sendPayment(
         wallet.secretKey,
-        args.to as string,
+        args.destination as string,
         args.amount as string,
-        wallet.network,
+        args.asset as string,
+        network,
+        args.memo as string | undefined,
       );
       yield* output.print(output.ok(result));
     }).pipe(
@@ -49,7 +79,7 @@ export const walletTransfer = defineCommand({
         StellarAccountError: (e) =>
           Effect.gen(function* () {
             const output = yield* OutputService;
-            yield* output.print(output.err(`Failed to load account: ${e.cause}`));
+            yield* output.print(output.err(`Account error: ${e.cause}`));
           }),
         StellarTransactionError: (e) =>
           Effect.gen(function* () {
@@ -58,7 +88,6 @@ export const walletTransfer = defineCommand({
           }),
       }),
     );
-
     await runApp(program);
   },
 });

@@ -1,22 +1,28 @@
-import { Terminal, Github } from "lucide-react";
+import { StecliLogo } from "./logo";
 
 export function Navbar() {
   return (
     <nav className="inner flex items-center justify-between py-6">
-      <a href="/" className="flex items-center gap-2.5 no-underline">
-        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-foreground">
-          <Terminal className="h-4 w-4 text-background" strokeWidth={2.5} />
-        </div>
+      <div className="flex items-center gap-2.5">
+        <StecliLogo className="h-8 w-8" />
         <span className="text-lg font-semibold tracking-tight text-foreground">stecli</span>
-      </a>
-      <div className="flex items-center gap-6">
+      </div>
+      <div className="flex items-center gap-6 text-sm text-muted">
         <a
           href="https://github.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-muted hover:text-foreground transition-colors"
+          className="hover:text-foreground transition-colors"
         >
-          <Github className="h-5 w-5" />
+          GitHub
+        </a>
+        <a
+          href="https://developers.stellar.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-foreground transition-colors"
+        >
+          Stellar Docs
         </a>
       </div>
     </nav>

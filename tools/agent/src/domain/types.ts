@@ -51,3 +51,143 @@ export interface PaymentResult {
   readonly settlement?: unknown;
   readonly bodyPreview?: string;
 }
+
+export interface PaginationOpts {
+  readonly cursor?: string;
+  readonly limit?: number;
+  readonly order?: "asc" | "desc";
+}
+
+export interface AccountDetails {
+  readonly id: string;
+  readonly accountId: string;
+  readonly sequence: string;
+  readonly subentryCount: number;
+  readonly thresholds: { readonly low: number; readonly med: number; readonly high: number };
+  readonly balances: ReadonlyArray<{
+    readonly balance: string;
+    readonly assetType: string;
+    readonly assetCode?: string;
+    readonly assetIssuer?: string;
+    readonly limit?: string;
+    readonly buyingLiabilities?: string;
+    readonly sellingLiabilities?: string;
+  }>;
+  readonly signers: ReadonlyArray<{
+    readonly key: string;
+    readonly weight: number;
+    readonly type: string;
+  }>;
+  readonly flags: {
+    readonly authRequired: boolean;
+    readonly authRevocable: boolean;
+    readonly authImmutable: boolean;
+    readonly authClawbackEnabled: boolean;
+  };
+  readonly homeDomain?: string;
+  readonly lastModifiedLedger: number;
+  readonly lastModifiedTime: string;
+}
+
+export interface TransactionRecord {
+  readonly id: string;
+  readonly hash: string;
+  readonly createdAt: string;
+  readonly ledger: number;
+  readonly sourceAccount: string;
+  readonly sourceAccountSequence: string;
+  readonly feeCharged: number | string;
+  readonly maxFee: number | string;
+  readonly operationCount: number;
+  readonly successful: boolean;
+  readonly memoType: string;
+  readonly memo?: string;
+}
+
+export interface PaymentOperationRecord {
+  readonly id: string;
+  readonly from: string;
+  readonly to: string;
+  readonly amount: string;
+  readonly assetType: string;
+  readonly assetCode?: string;
+  readonly assetIssuer?: string;
+  readonly transactionHash: string;
+  readonly createdAt: string;
+}
+
+export interface EffectRecord {
+  readonly id: string;
+  readonly account: string;
+  readonly type: string;
+  readonly createdAt: string;
+}
+
+export interface AssetRecord {
+  readonly assetType: string;
+  readonly assetCode: string;
+  readonly assetIssuer: string;
+  readonly amount: string;
+  readonly numAccounts: number;
+}
+
+export interface OrderbookRecord {
+  readonly selling: {
+    readonly assetType: string;
+    readonly assetCode?: string;
+    readonly assetIssuer?: string;
+  };
+  readonly buying: {
+    readonly assetType: string;
+    readonly assetCode?: string;
+    readonly assetIssuer?: string;
+  };
+  readonly bids: ReadonlyArray<{ readonly price: string; readonly amount: string }>;
+  readonly asks: ReadonlyArray<{ readonly price: string; readonly amount: string }>;
+}
+
+export interface FeeStats {
+  readonly feeCharged: {
+    readonly min: string;
+    readonly max: string;
+    readonly mode: string;
+    readonly p10: string;
+    readonly p20: string;
+    readonly p30: string;
+    readonly p40: string;
+    readonly p50: string;
+    readonly p60: string;
+    readonly p70: string;
+    readonly p80: string;
+    readonly p90: string;
+    readonly p95: string;
+    readonly p99: string;
+  };
+  readonly maxFee: {
+    readonly min: string;
+    readonly max: string;
+    readonly mode: string;
+    readonly p10: string;
+    readonly p20: string;
+    readonly p30: string;
+    readonly p40: string;
+    readonly p50: string;
+    readonly p60: string;
+    readonly p70: string;
+    readonly p80: string;
+    readonly p90: string;
+    readonly p95: string;
+    readonly p99: string;
+  };
+  readonly ledgerCapacity: string;
+}
+
+export interface SendResult {
+  readonly from: string;
+  readonly to: string;
+  readonly amount: string;
+  readonly asset: string;
+  readonly memo?: string;
+  readonly txHash: string;
+  readonly ledger: number;
+}

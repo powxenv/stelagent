@@ -3,7 +3,7 @@ import { SessionService } from "#/services/session.js";
 import { WalletNotFoundError, WalletFetchError, WalletCreateError } from "#/domain/errors.js";
 import type { WalletInfo } from "#/domain/types.js";
 
-const API_BASE_URL = "https://cent.dev";
+const API_BASE_URL = process.env.STECLI_API_URL ?? "https://stecli.dev";
 
 export class WalletClientService extends Context.Tag("WalletClientService")<
   WalletClientService,

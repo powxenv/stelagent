@@ -2,7 +2,7 @@ import { defineCommand } from "citty";
 import { text, isCancel, cancel, log } from "@clack/prompts";
 import pc from "picocolors";
 import { Effect } from "effect";
-import { AppLive } from "#/layers/app-layer.js";
+import { runApp } from "#/lib/run.js";
 import { OutputService } from "#/services/output.js";
 import { AuthService } from "#/services/auth.js";
 import { SessionService } from "#/services/session.js";
@@ -122,6 +122,6 @@ export const walletLogin = defineCommand({
       }),
     );
 
-    await Effect.runPromise(Effect.provide(program, AppLive));
+    await runApp(program);
   },
 });
