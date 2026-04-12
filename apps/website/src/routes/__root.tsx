@@ -49,12 +49,11 @@ export const Route = createRootRoute<{
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="light" suppressHydrationWarning>
+    <html lang="en" className="dark" data-theme="dark" suppressHydrationWarning>
       <head>
-        {/* <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} /> */}
         <HeadContent />
       </head>
-      <body className="font-sans antialiased wrap-anywhere bg-background">
+      <body className="font-sans antialiased wrap-anywhere bg-background text-foreground">
         {children}
         <TanStackDevtools
           config={{

@@ -8,9 +8,7 @@ export const wallets = pgTable("wallets", {
   salt: text().notNull(),
   iv: text().notNull(),
   network: text().notNull().default("testnet"),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const walletSessions = pgTable("wallet_sessions", {
@@ -18,7 +16,5 @@ export const walletSessions = pgTable("wallet_sessions", {
   email: text().notNull(),
   token: text().notNull().unique(),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });

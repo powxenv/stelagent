@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     NEON_DATABASE_URL: z.string(),
     NEON_DATA_API_URL: z.string(),
+    RESEND_API_KEY: z.string(),
   },
 
   /**
