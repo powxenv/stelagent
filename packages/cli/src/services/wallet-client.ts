@@ -39,15 +39,14 @@ export async function fetchWallet(): Promise<WalletResult<WalletInfo>> {
         headers: { authorization: `Bearer ${s.token}` },
       });
       if (!res.ok) {
-        return Result.err(new WalletFetchError({ cause: String(res.status) }));
+        throw new WalletFetchError({ cause: String(res.status) });
       }
       const data = (await res.json()) as { ok: boolean; wallet: WalletInfo };
-      return Result.ok<WalletInfo, WalletFetchError | WalletNotFoundError | WalletCreateError>(
-        data.wallet,
-      );
+      return data.wallet;
     },
-    catch: (e: unknown) => new WalletFetchError({ cause: String(e) }),
-  }).then(Result.flatten);
+    catch: (e: unknown): WalletFetchError =>
+      e instanceof WalletFetchError ? e : new WalletFetchError({ cause: String(e) }),
+  });
 }
 
 export async function fetchAddress(): Promise<WalletResult<WalletAddress>> {
@@ -61,15 +60,14 @@ export async function fetchAddress(): Promise<WalletResult<WalletAddress>> {
         headers: { authorization: `Bearer ${s.token}` },
       });
       if (!res.ok) {
-        return Result.err(new WalletFetchError({ cause: String(res.status) }));
+        throw new WalletFetchError({ cause: String(res.status) });
       }
       const data = (await res.json()) as { ok: boolean; address: WalletAddress };
-      return Result.ok<WalletAddress, WalletFetchError | WalletNotFoundError | WalletCreateError>(
-        data.address,
-      );
+      return data.address;
     },
-    catch: (e: unknown) => new WalletFetchError({ cause: String(e) }),
-  }).then(Result.flatten);
+    catch: (e: unknown): WalletFetchError =>
+      e instanceof WalletFetchError ? e : new WalletFetchError({ cause: String(e) }),
+  });
 }
 
 export async function createWallet(network: string): Promise<WalletResult<WalletInfo>> {
@@ -88,13 +86,12 @@ export async function createWallet(network: string): Promise<WalletResult<Wallet
         body: JSON.stringify({ network }),
       });
       if (!res.ok) {
-        return Result.err(new WalletCreateError({ cause: String(res.status) }));
+        throw new WalletCreateError({ cause: String(res.status) });
       }
       const data = (await res.json()) as { ok: boolean; created: boolean; wallet: WalletInfo };
-      return Result.ok<WalletInfo, WalletFetchError | WalletNotFoundError | WalletCreateError>(
-        data.wallet,
-      );
+      return data.wallet;
     },
-    catch: (e: unknown) => new WalletCreateError({ cause: String(e) }),
-  }).then(Result.flatten);
+    catch: (e: unknown): WalletCreateError =>
+      e instanceof WalletCreateError ? e : new WalletCreateError({ cause: String(e) }),
+  });
 }

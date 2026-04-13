@@ -24,6 +24,13 @@ const NETWORK_PASSPHRASE: Record<Network, string> = {
   pubnet: "Public Global Stellar Network ; September 2015",
 };
 
+type StellarError =
+  | StellarAccountError
+  | StellarTransactionError
+  | UnfundedAccountError
+  | InsufficientBalanceError
+  | NetworkTimeoutError;
+
 function classifyAccountError(
   e: unknown,
   address: string,
@@ -56,6 +63,20 @@ function classifyTransactionError(e: unknown): StellarTransactionError | Insuffi
   return new StellarTransactionError({ cause: message });
 }
 
+function isStellarError(e: unknown): e is StellarError {
+  return (
+    e instanceof StellarAccountError ||
+    e instanceof StellarTransactionError ||
+    e instanceof UnfundedAccountError ||
+    e instanceof InsufficientBalanceError ||
+    e instanceof NetworkTimeoutError
+  );
+}
+
+function classifyOrPassthrough(e: unknown): StellarError {
+  return isStellarError(e) ? e : classifyTransactionError(e);
+}
+
 async function buildAsset(assetStr: string) {
   const { Asset } = await import("@stellar/stellar-sdk");
   if (assetStr === "native" || assetStr === "XLM") return Asset.native();
@@ -75,28 +96,22 @@ export async function getBalances(
       const { Horizon } = await import("@stellar/stellar-sdk");
       const server = new Horizon.Server(HORIZON_URLS[network]);
       const account = await server.loadAccount(publicKey);
-      const balances: ReadonlyArray<BalanceEntry> = account.balances.map((b) => ({
-        assetType: b.asset_type,
-        assetCode:
-          b.asset_type === "native"
-            ? "XLM"
-            : "asset_code" in b && typeof b.asset_code === "string"
-              ? b.asset_code
-              : "",
-        balance: b.balance,
-      }));
-      return Result.ok<ReadonlyArray<BalanceEntry>, StellarError>(balances);
+      return account.balances.map(
+        (b): BalanceEntry => ({
+          assetType: b.asset_type,
+          assetCode:
+            b.asset_type === "native"
+              ? "XLM"
+              : "asset_code" in b && typeof b.asset_code === "string"
+                ? b.asset_code
+                : "",
+          balance: b.balance,
+        }),
+      );
     },
     catch: (e: unknown) => classifyAccountError(e, publicKey),
-  }).then(Result.flatten);
+  });
 }
-
-type StellarError =
-  | StellarAccountError
-  | StellarTransactionError
-  | UnfundedAccountError
-  | InsufficientBalanceError
-  | NetworkTimeoutError;
 
 export async function transferXlm(
   sourceSecret: string,
@@ -132,27 +147,16 @@ export async function transferXlm(
       const tx = txBuilder.build();
       tx.sign(sourceKp);
       const resp = await server.submitTransaction(tx);
-      return Result.ok<TransferResult, StellarError>({
+      return {
         from: sourceKp.publicKey(),
         to: destination,
         amount,
         asset: "XLM",
         txHash: resp.hash,
-      });
+      } satisfies TransferResult;
     },
-    catch: (e: unknown) => {
-      if (
-        e instanceof StellarTransactionError ||
-        e instanceof InsufficientBalanceError ||
-        e instanceof UnfundedAccountError ||
-        e instanceof NetworkTimeoutError ||
-        e instanceof StellarAccountError
-      ) {
-        return e;
-      }
-      return classifyTransactionError(e);
-    },
-  }).then(Result.flatten);
+    catch: (e: unknown) => classifyOrPassthrough(e),
+  });
 }
 
 export async function sendPayment(
@@ -195,7 +199,7 @@ export async function sendPayment(
       const tx = txBuilder.build();
       tx.sign(sourceKp);
       const resp = await server.submitTransaction(tx);
-      return Result.ok<SendResult, StellarError>({
+      return {
         from: sourceKp.publicKey(),
         to: destination,
         amount,
@@ -203,19 +207,8 @@ export async function sendPayment(
         memo,
         txHash: resp.hash,
         ledger: resp.ledger,
-      });
+      } satisfies SendResult;
     },
-    catch: (e: unknown) => {
-      if (
-        e instanceof StellarTransactionError ||
-        e instanceof InsufficientBalanceError ||
-        e instanceof UnfundedAccountError ||
-        e instanceof NetworkTimeoutError ||
-        e instanceof StellarAccountError
-      ) {
-        return e;
-      }
-      return classifyTransactionError(e);
-    },
-  }).then(Result.flatten);
+    catch: (e: unknown) => classifyOrPassthrough(e),
+  });
 }

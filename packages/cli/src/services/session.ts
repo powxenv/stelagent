@@ -29,21 +29,13 @@ export function loadSession(): SessionResult<SessionData> {
     try: () => (existsSync(SESSION_FILE) ? readFileSync(SESSION_FILE, "utf8") : null),
     catch: (e: unknown) => new SessionReadError({ cause: String(e) }),
   });
-
   if (Result.isError(fileResult)) return Result.err(fileResult.error);
-
   const raw = fileResult.value;
   if (raw === null) return Result.err(new SessionNotFoundError());
-
-  return Result.flatten(
-    Result.try({
-      try: () => {
-        const parsed = SessionDataSchema.parse(JSON.parse(raw));
-        return Result.ok<SessionData, SessionReadError | SessionNotFoundError>(parsed);
-      },
-      catch: (e: unknown) => new SessionReadError({ cause: String(e) }),
-    }),
-  );
+  return Result.try({
+    try: () => SessionDataSchema.parse(JSON.parse(raw)),
+    catch: (e: unknown) => new SessionReadError({ cause: String(e) }),
+  });
 }
 
 export function clearSession(): SessionResult<void> {

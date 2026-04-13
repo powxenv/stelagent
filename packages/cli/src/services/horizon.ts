@@ -14,7 +14,6 @@ import type {
   CandleRecord,
   TradeAggregationOpts,
   HorizonResult,
-  HorizonQueryError,
 } from "#/domain/types.js";
 
 const HORIZON_URLS: Record<Network, string> = {
@@ -26,7 +25,10 @@ function horizonServer(network: Network): Horizon.Server {
   return new Horizon.Server(HORIZON_URLS[network]);
 }
 
-function classifyHorizonError(e: unknown, address?: string): HorizonQueryError {
+function classifyHorizonError(
+  e: unknown,
+  address?: string,
+): HorizonError | UnfundedAccountError | NetworkTimeoutError {
   const message = e instanceof Error ? e.message : String(e);
   if (
     address &&
@@ -104,7 +106,7 @@ export async function getAccountDetails(
       const server = horizonServer(network);
       const account = await server.loadAccount(publicKey);
       const flags = account.flags;
-      return Result.ok<AccountDetails, HorizonQueryError>({
+      return {
         id: account.id,
         accountId: account.account_id,
         sequence: account.sequence,
@@ -145,10 +147,10 @@ export async function getAccountDetails(
             : undefined,
         lastModifiedLedger: account.last_modified_ledger,
         lastModifiedTime: account.last_modified_time,
-      });
+      } satisfies AccountDetails;
     },
     catch: (e: unknown) => classifyHorizonError(e, publicKey),
-  }).then(Result.flatten);
+  });
 }
 
 export async function getTransactions(
@@ -161,12 +163,10 @@ export async function getTransactions(
       const server = horizonServer(network);
       const builder = withPagination(server.transactions().forAccount(publicKey), opts);
       const page = await builder.call();
-      return Result.ok<ReadonlyArray<TransactionRecord>, HorizonQueryError>(
-        page.records.map(toTransactionRecord),
-      );
+      return page.records.map(toTransactionRecord);
     },
     catch: (e: unknown) => classifyHorizonError(e),
-  }).then(Result.flatten);
+  });
 }
 
 export async function getPayments(
@@ -179,14 +179,12 @@ export async function getPayments(
       const server = horizonServer(network);
       const builder = withPagination(server.payments().forAccount(publicKey), opts);
       const page = await builder.call();
-      return Result.ok<ReadonlyArray<PaymentOperationRecord>, HorizonQueryError>(
-        page.records
-          .filter((raw): raw is Horizon.ServerApi.PaymentOperationRecord => raw.type === "payment")
-          .map(toPaymentRecord),
-      );
+      return page.records
+        .filter((raw): raw is Horizon.ServerApi.PaymentOperationRecord => raw.type === "payment")
+        .map(toPaymentRecord);
     },
     catch: (e: unknown) => classifyHorizonError(e),
-  }).then(Result.flatten);
+  });
 }
 
 export async function getEffects(
@@ -199,12 +197,10 @@ export async function getEffects(
       const server = horizonServer(network);
       const builder = withPagination(server.effects().forAccount(publicKey), opts);
       const page = await builder.call();
-      return Result.ok<ReadonlyArray<EffectRecord>, HorizonQueryError>(
-        page.records.map(toEffectRecord),
-      );
+      return page.records.map(toEffectRecord);
     },
     catch: (e: unknown) => classifyHorizonError(e),
-  }).then(Result.flatten);
+  });
 }
 
 export async function getAssets(
@@ -219,21 +215,19 @@ export async function getAssets(
       if (opts?.issuer) builder = builder.forIssuer(opts.issuer);
       builder = withPagination(builder, opts);
       const page = await builder.call();
-      return Result.ok<ReadonlyArray<AssetRecord>, HorizonQueryError>(
-        page.records.map((a) => {
-          const raw = a as unknown as Record<string, unknown>;
-          return {
-            assetType: a.asset_type,
-            assetCode: a.asset_code,
-            assetIssuer: a.asset_issuer,
-            amount: typeof raw["amount"] === "string" ? raw["amount"] : "0",
-            numAccounts: typeof raw["num_accounts"] === "number" ? raw["num_accounts"] : 0,
-          };
-        }),
-      );
+      return page.records.map((a) => {
+        const raw = a as unknown as Record<string, unknown>;
+        return {
+          assetType: a.asset_type,
+          assetCode: a.asset_code,
+          assetIssuer: a.asset_issuer,
+          amount: typeof raw["amount"] === "string" ? raw["amount"] : "0",
+          numAccounts: typeof raw["num_accounts"] === "number" ? raw["num_accounts"] : 0,
+        } satisfies AssetRecord;
+      });
     },
     catch: (e: unknown) => classifyHorizonError(e),
-  }).then(Result.flatten);
+  });
 }
 
 export async function getOrderbook(
@@ -264,7 +258,7 @@ export async function getOrderbook(
       const server = horizonServer(network);
       const builder = withPagination(server.orderbook(sellingAsset, buyingAsset), opts);
       const response = await builder.call();
-      return Result.ok<OrderbookRecord, HorizonQueryError>({
+      return {
         selling: {
           assetType: selling.assetType,
           assetCode: selling.assetCode,
@@ -277,10 +271,10 @@ export async function getOrderbook(
         },
         bids: response.bids.map((b) => ({ price: b.price, amount: b.amount })),
         asks: response.asks.map((a) => ({ price: a.price, amount: a.amount })),
-      });
+      } satisfies OrderbookRecord;
     },
     catch: (e: unknown) => classifyHorizonError(e),
-  }).then(Result.flatten);
+  });
 }
 
 export async function getFeeStats(network: Network): Promise<HorizonResult<FeeStats>> {
@@ -288,14 +282,14 @@ export async function getFeeStats(network: Network): Promise<HorizonResult<FeeSt
     try: async () => {
       const server = horizonServer(network);
       const stats = await server.feeStats();
-      return Result.ok<FeeStats, HorizonQueryError>({
+      return {
         feeCharged: stats.fee_charged,
         maxFee: stats.max_fee,
         ledgerCapacity: stats.ledger_capacity_usage,
-      });
+      } satisfies FeeStats;
     },
     catch: (e: unknown) => classifyHorizonError(e),
-  }).then(Result.flatten);
+  });
 }
 
 export async function getTradeAggregations(
@@ -324,22 +318,20 @@ export async function getTradeAggregations(
       );
       builder = withPagination(builder, opts);
       const page = await builder.call();
-      return Result.ok<ReadonlyArray<CandleRecord>, HorizonQueryError>(
-        page.records.map((raw) => ({
-          timestamp: String(raw.timestamp),
-          tradeCount: Number(raw.trade_count),
-          baseVolume: String(raw.base_volume),
-          counterVolume: String(raw.counter_volume),
-          avg: String(raw.avg),
-          high: String(raw.high),
-          low: String(raw.low),
-          open: String(raw.open),
-          close: String(raw.close),
-        })),
-      );
+      return page.records.map((raw) => ({
+        timestamp: String(raw.timestamp),
+        tradeCount: Number(raw.trade_count),
+        baseVolume: String(raw.base_volume),
+        counterVolume: String(raw.counter_volume),
+        avg: String(raw.avg),
+        high: String(raw.high),
+        low: String(raw.low),
+        open: String(raw.open),
+        close: String(raw.close),
+      }));
     },
     catch: (e: unknown) => classifyHorizonError(e),
-  }).then(Result.flatten);
+  });
 }
 
 export function streamTransactions(

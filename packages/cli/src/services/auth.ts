@@ -13,14 +13,15 @@ export function requestOtp(email: string): Promise<AuthResult<OtpResponse>> {
         body: JSON.stringify({ email }),
       });
       if (!res.ok) {
-        return Result.err(new AuthRequestError({ cause: `${res.status} ${res.statusText}` }));
+        throw new AuthRequestError({ cause: `${res.status} ${res.statusText}` });
       }
-      const data = (await res.json()) as OtpResponse;
-      return Result.ok(data);
+      return (await res.json()) as OtpResponse;
     },
-    catch: (e: unknown) =>
-      new AuthRequestError({ cause: e instanceof Error ? e.message : String(e) }),
-  }).then(Result.flatten);
+    catch: (e: unknown): AuthRequestError =>
+      e instanceof AuthRequestError
+        ? e
+        : new AuthRequestError({ cause: e instanceof Error ? e.message : String(e) }),
+  });
 }
 
 export function verifyOtp(email: string, otp: string): Promise<AuthResult<VerifyResponse>> {
@@ -32,12 +33,13 @@ export function verifyOtp(email: string, otp: string): Promise<AuthResult<Verify
         body: JSON.stringify({ email, otp }),
       });
       if (!res.ok) {
-        return Result.err(new OtpVerifyError({ cause: `${res.status} ${res.statusText}` }));
+        throw new OtpVerifyError({ cause: `${res.status} ${res.statusText}` });
       }
-      const data = (await res.json()) as VerifyResponse;
-      return Result.ok(data);
+      return (await res.json()) as VerifyResponse;
     },
-    catch: (e: unknown) =>
-      new OtpVerifyError({ cause: e instanceof Error ? e.message : String(e) }),
-  }).then(Result.flatten);
+    catch: (e: unknown): OtpVerifyError =>
+      e instanceof OtpVerifyError
+        ? e
+        : new OtpVerifyError({ cause: e instanceof Error ? e.message : String(e) }),
+  });
 }

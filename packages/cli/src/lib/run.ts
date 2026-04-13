@@ -1,4 +1,4 @@
-import { Result, isTaggedError, matchErrorPartial } from "better-result";
+import { Result, isTaggedError, matchError } from "better-result";
 import type {
   AuthRequestError,
   OtpVerifyError,
@@ -45,31 +45,27 @@ type AppError =
 
 function formatError(e: unknown): string {
   if (isTaggedError(e)) {
-    return matchErrorPartial(
-      e as AppError,
-      {
-        AuthRequestError: (err) => `AuthRequestError: ${err.cause}`,
-        OtpVerifyError: (err) => `OtpVerifyError: ${err.cause}`,
-        SessionNotFoundError: () => "SessionNotFoundError",
-        SessionReadError: (err) => `SessionReadError: ${err.cause}`,
-        SessionWriteError: (err) => `SessionWriteError: ${err.cause}`,
-        WalletNotFoundError: () => "WalletNotFoundError",
-        WalletFetchError: (err) => `WalletFetchError: ${err.cause}`,
-        WalletCreateError: (err) => `WalletCreateError: ${err.cause}`,
-        StellarAccountError: (err) => `StellarAccountError: ${err.cause}`,
-        StellarTransactionError: (err) => `StellarTransactionError: ${err.cause}`,
-        PaymentHttpError: (err) => `PaymentHttpError: status=${err.status}`,
-        PaymentSetupError: (err) => `PaymentSetupError: ${err.cause}`,
-        InvalidNetworkError: (err) => `InvalidNetworkError: ${err.provided}`,
-        HorizonError: (err) => `HorizonError: ${err.cause}`,
-        AuditError: (err) => `AuditError: ${err.cause}`,
-        UnfundedAccountError: (err) => `UnfundedAccountError: ${err.address}`,
-        InsufficientBalanceError: (err) =>
-          `InsufficientBalanceError: need ${err.required} ${err.asset}, have ${err.available}`,
-        NetworkTimeoutError: (err) => `NetworkTimeoutError: ${err.cause}`,
-      },
-      (_unknownErr: never) => "UnknownError",
-    );
+    return matchError(e as AppError, {
+      AuthRequestError: (err) => `AuthRequestError: ${err.cause}`,
+      OtpVerifyError: (err) => `OtpVerifyError: ${err.cause}`,
+      SessionNotFoundError: () => "SessionNotFoundError",
+      SessionReadError: (err) => `SessionReadError: ${err.cause}`,
+      SessionWriteError: (err) => `SessionWriteError: ${err.cause}`,
+      WalletNotFoundError: () => "WalletNotFoundError",
+      WalletFetchError: (err) => `WalletFetchError: ${err.cause}`,
+      WalletCreateError: (err) => `WalletCreateError: ${err.cause}`,
+      StellarAccountError: (err) => `StellarAccountError: ${err.cause}`,
+      StellarTransactionError: (err) => `StellarTransactionError: ${err.cause}`,
+      PaymentHttpError: (err) => `PaymentHttpError: status=${err.status}`,
+      PaymentSetupError: (err) => `PaymentSetupError: ${err.cause}`,
+      InvalidNetworkError: (err) => `InvalidNetworkError: ${err.provided}`,
+      HorizonError: (err) => `HorizonError: ${err.cause}`,
+      AuditError: (err) => `AuditError: ${err.cause}`,
+      UnfundedAccountError: (err) => `UnfundedAccountError: ${err.address}`,
+      InsufficientBalanceError: (err) =>
+        `InsufficientBalanceError: need ${err.required} ${err.asset}, have ${err.available}`,
+      NetworkTimeoutError: (err) => `NetworkTimeoutError: ${err.cause}`,
+    });
   }
   if (e instanceof Error) {
     return e.message;
