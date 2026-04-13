@@ -9,6 +9,7 @@
     "dev": "vp dev --port 3000",
     "build": "vp build",
     "preview": "vp preview",
+    "gen": "wrangler types",
     "test": "vp test run",
     "email:dev": "email dev --port 3022"
   },
@@ -40,6 +41,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.31.2",
     "@iconify-json/hugeicons": "^1.2.25",
     "@react-email/preview-server": "5.2.10",
     "@svgr/core": "^8.1.0",
@@ -59,7 +61,8 @@
     "unplugin-icons": "^23.0.1",
     "vite": "catalog:",
     "vite-plus": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "wrangler": "^4.81.1"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
