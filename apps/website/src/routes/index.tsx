@@ -20,6 +20,7 @@ function App() {
       <Commands />
       <Divider />
       <GetStarted />
+      <Divider />
       <Footer />
     </div>
   );

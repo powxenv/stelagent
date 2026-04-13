@@ -2,7 +2,7 @@ import { StecliLogo } from "./logo";
 
 export function Navbar() {
   return (
-    <nav className="inner flex items-center justify-between py-6">
+    <nav className="inner flex items-center justify-between py-6 fixed top-0 inset-x-0 border-x px-8 border-b bg-background/60 backdrop-blur-2xl z-10">
       <div className="flex items-center gap-2.5">
         <StecliLogo className="h-8 w-8" />
         <span className="text-lg font-semibold tracking-tight text-foreground">Stecli</span>

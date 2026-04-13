@@ -2,7 +2,7 @@ import { StecliLogo } from "./logo";
 
 export function Footer() {
   return (
-    <footer className="inner py-8 border-t border-border">
+    <footer className="inner border-x px-8 py-8 border-t border-border">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2.5">
           <StecliLogo className="h-5 w-5" />

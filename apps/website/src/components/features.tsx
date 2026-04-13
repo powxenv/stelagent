@@ -29,8 +29,8 @@ const features = [
 
 export function Features() {
   return (
-    <section className="inner py-28">
-      <div className="mb-16">
+    <section className="inner border-x pt-16">
+      <div className="px-8 mb-16">
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
           Built for agents,
           <br />
@@ -42,9 +42,12 @@ export function Features() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-14">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[url(/features.png)] p-8">
         {features.map((feature) => (
-          <div key={feature.title} className="flex flex-col gap-3">
+          <div
+            key={feature.title}
+            className="flex flex-col gap-3 rounded-2xl p-6 bg-surface/90 backdrop-blur-2xl"
+          >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-secondary">
               <feature.icon className="h-5 w-5 text-foreground" />
             </div>

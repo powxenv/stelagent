@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy, Terminal } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 
 const AGENT_PROMPT = "Read http://stecli.noval.me/AGENTS.md, then set it up for me.";
 
 export function GetStarted() {
   return (
-    <section className="inner py-28">
+    <section className="inner py-16 px-8 border-x">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
         <div>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
@@ -42,11 +42,6 @@ export function GetStarted() {
               <span className="text-muted">$</span> <span className="text-success">npx</span> stecli
               pay https://api.example.com/premium
             </code>
-          </div>
-
-          <div className="mt-8 flex items-center gap-3 text-sm text-muted">
-            <Terminal className="h-4 w-4" />
-            <span>All commands output structured JSON</span>
           </div>
         </div>
       </div>
@@ -89,9 +84,6 @@ function AgentPromptBox() {
         <div className="min-w-0 flex-1">
           <p className="font-mono text-sm md:text-base text-foreground leading-relaxed break-words">
             {AGENT_PROMPT}
-          </p>
-          <p className="text-xs text-muted mt-1.5">
-            {copied ? "Copied to clipboard" : "Click to copy"}
           </p>
         </div>
       </div>
