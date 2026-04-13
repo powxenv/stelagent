@@ -41,7 +41,10 @@ export const Route = createFileRoute("/api/cli/auth/otp/request")({
         });
 
         if (error) {
-          return Response.json({ ok: false, error: "Failed to send email" }, { status: 500 });
+          return Response.json(
+            { ok: false, error: "Failed to send email", details: error },
+            { status: 500 },
+          );
         }
 
         return Response.json({
