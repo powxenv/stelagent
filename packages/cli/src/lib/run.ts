@@ -73,15 +73,23 @@ function formatError(e: unknown): string {
   return String(e);
 }
 
+export interface RunAppOptions {
+  readonly silent?: boolean;
+}
+
 export async function runApp<A>(
   command: string,
   fn: () => Promise<A>,
   format: OutputFormat = "json",
+  options?: RunAppOptions,
 ): Promise<A> {
   const start = Date.now();
   try {
     const result = await fn();
     writeAuditEntry({ command, ok: true, durationMs: Date.now() - start });
+    if (!options?.silent) {
+      printResult(Result.ok(result), format);
+    }
     return result;
   } catch (e: unknown) {
     writeAuditEntry({ command, ok: false, durationMs: Date.now() - start });

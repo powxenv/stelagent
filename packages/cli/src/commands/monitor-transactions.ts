@@ -77,6 +77,7 @@ export const monitorTransactions = defineCommand({
           );
         },
         format,
+        { silent: true },
       );
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e);
