@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 
-const AGENT_PROMPT = "Read http://stelagent.noval.me/AGENTS.md, then set it up for me.";
+const AGENT_PROMPT = "Read https://stelagent.noval.me/AGENTS.md, then set it up for me.";
 
 export function GetStarted() {
   return (

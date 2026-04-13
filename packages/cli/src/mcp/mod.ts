@@ -11,7 +11,7 @@ export async function startMcpServer(): Promise<void> {
     {
       instructions: [
         "Stelagent MCP server for Stellar blockchain operations.",
-        "Wallet tools (address, balance, transfer, send, pay) require an active session — the user must run `stelagent wallet login` via CLI first.",
+        "Authentication flow: 1) wallet_login (sends OTP to email) → 2) wallet_verify (verifies OTP, creates session and wallet). After verify, all other wallet tools work.",
         "Account, asset, and fee tools are public and require no authentication — only a Stellar public key or network parameter.",
         "All tools return { ok: true, data } on success or { ok: false, error } on failure.",
         "Network defaults to 'testnet'. Use 'pubnet' for mainnet.",

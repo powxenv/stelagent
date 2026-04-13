@@ -5,7 +5,7 @@
 Run the following command to install the stelagent skill:
 
 ```bash
-npx flins@latest add powxenv/stelagent --skill stelagent
+npx flins@latest add stelagent.noval.me
 ```
 
 ## 2. Read the Skill

@@ -7,13 +7,13 @@ import HugeiconsChatBot from "~icons/hugeicons/chat-bot";
 import HugeiconsTools from "~icons/hugeicons/tools";
 import HugeiconsLoading03 from "~icons/hugeicons/loading-03";
 
-const AGENT_PROMPT = "Read http://stelagent.noval.me/AGENTS.md, then set it up for me.";
+const AGENT_PROMPT = "Read https://stelagent.noval.me/AGENTS.md, then set it up for me.";
 
 const CHAT_MESSAGES = [
   {
     role: "user",
     icon: HugeiconsUser,
-    text: "Read http://stelagent.noval.me/AGENTS.md, then set it up for me.",
+    text: "Read https://stelagent.noval.me/AGENTS.md, then set it up for me.",
   },
   {
     role: "bot",

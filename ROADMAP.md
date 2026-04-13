@@ -176,10 +176,10 @@ New domain errors in `domain/errors.ts`:
 
 > Layer on agent-friendly features now that the command surface is stable.
 
-- [ ] Create `skills/` directory with SKILL.md definitions for each command group
-- [ ] Add intent-routing trigger phrases to each skill's YAML frontmatter
-- [ ] Implement `stelagent mcp` command using `@modelcontextprotocol/sdk`
-- [ ] Thin adapter: MCP tools call the same service functions as CLI commands
+- [x] Create `skills/` directory with SKILL.md definitions for each command group
+- [x] Add intent-routing trigger phrases to each skill's YAML frontmatter
+- [x] Implement `stelagent mcp` command using `@modelcontextprotocol/sdk`
+- [x] Thin adapter: MCP tools call the same service functions as CLI commands
 - [ ] Soroban contract interaction (deploy, simulate, invoke)
 - [ ] Test MCP server with Claude Code, Cursor, OpenCode
 

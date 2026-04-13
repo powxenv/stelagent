@@ -1,13 +1,13 @@
-# CLI Command Reference
+# Stelagent CLI Reference
 
-Detailed parameter tables, output schemas, and usage examples for every stelagent command.
+Complete parameter tables, return field schemas, and usage examples for all commands.
 
 ## wallet login
 
-Request an OTP code be sent to an email address.
+Request an OTP code be sent to an email address. This is step 1 of the two-step authentication flow. Use `wallet verify` to complete login.
 
 ```bash
-stelagent wallet login -e <email> [-n testnet|pubnet] [-f json|text]
+npx stelagent@latest wallet login -e <email> [-n testnet|pubnet] [-f json|text]
 ```
 
 | Arg     | Flag | Required | Default   | Description          |
@@ -22,20 +22,20 @@ stelagent wallet login -e <email> [-n testnet|pubnet] [-f json|text]
 { "ok": true, "data": { "message": "OTP sent to user@example.com" } }
 ```
 
-This command only requests the OTP. Use `stelagent wallet verify` to complete authentication.
+After calling this, the user must check their email for the OTP code, then run `wallet verify` to complete authentication.
 
 ## wallet verify
 
 Verify an OTP code and create or recover a wallet.
 
 ```bash
-stelagent wallet verify -e <email> -o <otp> [-n testnet|pubnet] [-f json|text]
+npx stelagent@latest wallet verify -e <email> -o <otp> [-n testnet|pubnet] [-f json|text]
 ```
 
 | Arg     | Flag | Required | Default   | Description                                 |
 | ------- | ---- | -------- | --------- | ------------------------------------------- |
 | email   | `-e` | yes      | —         | Must match the email used in `wallet login` |
-| otp     | `-o` | yes      | —         | 6-digit code from email                     |
+| otp     | `-o` | yes      | —         | 4–8 digit code from email                   |
 | network | `-n` | no       | `testnet` | Stellar network                             |
 | format  | `-f` | no       | `json`    | Output format                               |
 
@@ -70,7 +70,7 @@ On testnet, the account is automatically funded via Friendbot.
 Show public key, network, and email. Does NOT expose the secret key.
 
 ```bash
-stelagent wallet address [-f json|text]
+npx stelagent@latest wallet address [-f json|text]
 ```
 
 **Output:**
@@ -84,7 +84,7 @@ stelagent wallet address [-f json|text]
 Show all asset balances for the logged-in wallet.
 
 ```bash
-stelagent wallet balance [-f json|text]
+npx stelagent@latest wallet balance [-f json|text]
 ```
 
 **Output:**
@@ -105,7 +105,7 @@ stelagent wallet balance [-f json|text]
 Send XLM to another Stellar address.
 
 ```bash
-stelagent wallet transfer -t <destination> -a <amount> [-f json|text]
+npx stelagent@latest wallet transfer -t <destination> -a <amount> [-f json|text]
 ```
 
 | Arg    | Flag | Required | Default | Description                      |
@@ -128,7 +128,7 @@ stelagent wallet transfer -t <destination> -a <amount> [-f json|text]
 Clear the local session.
 
 ```bash
-stelagent wallet logout [-f json|text]
+npx stelagent@latest wallet logout [-f json|text]
 ```
 
 **Output:**
@@ -142,7 +142,7 @@ stelagent wallet logout [-f json|text]
 Make an X402 payment to a URL. Requires wallet session.
 
 ```bash
-stelagent pay <url> [-f json|text]
+npx stelagent@latest pay <url> [-f json|text]
 ```
 
 | Arg | Type       | Required | Description               |
@@ -152,7 +152,16 @@ stelagent pay <url> [-f json|text]
 **Output (payment required):**
 
 ```json
-{ "ok": true, "data": { "url": "...", "status": 200, "paymentRequired": true, "settlement": {...}, "bodyPreview": "..." } }
+{
+  "ok": true,
+  "data": {
+    "url": "...",
+    "status": 200,
+    "paymentRequired": true,
+    "settlement": {},
+    "bodyPreview": "..."
+  }
+}
 ```
 
 **Output (no payment needed):**
@@ -166,7 +175,7 @@ stelagent pay <url> [-f json|text]
 Send any asset payment.
 
 ```bash
-stelagent send <destination> <amount> [-a asset] [-m memo] [-n testnet|pubnet] [-f json|text]
+npx stelagent@latest send <destination> <amount> [-a asset] [-m memo] [-n testnet|pubnet] [-f json|text]
 ```
 
 | Arg         | Flag       | Required | Default   | Description               |
@@ -178,22 +187,59 @@ stelagent send <destination> <amount> [-a asset] [-m memo] [-n testnet|pubnet] [
 | network     | `-n`       | no       | `testnet` | Stellar network           |
 | format      | `-f`       | no       | `json`    | Output format             |
 
+**Output:**
+
+```json
+{
+  "ok": true,
+  "data": {
+    "from": "G...",
+    "to": "G...",
+    "amount": "100",
+    "asset": "USDC:G...",
+    "memo": "Payment",
+    "txHash": "...",
+    "ledger": 12345
+  }
+}
+```
+
 ## account
 
 Query Stellar account data. No auth required.
 
 ```bash
-stelagent account details <address> [-n testnet|pubnet] [-f json|text]
-stelagent account transactions <address> [-n ...] [--limit 10] [--cursor ...] [--order desc] [-f ...]
-stelagent account payments <address> [same flags]
-stelagent account effects <address> [same flags]
+npx stelagent@latest account details <address> [-n testnet|pubnet] [-f json|text]
+npx stelagent@latest account transactions <address> [-n ...] [--limit 10] [--cursor ...] [--order desc] [-f ...]
+npx stelagent@latest account payments <address> [same flags]
+npx stelagent@latest account effects <address> [same flags]
+```
+
+**account details output:**
+
+```json
+{
+  "ok": true,
+  "data": {
+    "id": "G...",
+    "accountId": "G...",
+    "sequence": "123456789",
+    "subentryCount": 1,
+    "thresholds": { "low": 0, "med": 0, "high": 0 },
+    "balances": [...],
+    "signers": [...],
+    "flags": { "authRequired": false, "authRevocable": false, "authImmutable": false, "authClawbackEnabled": false },
+    "lastModifiedLedger": 12345,
+    "lastModifiedTime": "2026-..."
+  }
+}
 ```
 
 ## assets
 
 ```bash
-stelagent assets search [-c code] [-i issuer] [-n testnet|pubnet] [--limit 10] [-f json|text]
-stelagent assets orderbook -s <asset> -b <asset> [-n testnet|pubnet] [--limit 10] [-f json|text]
+npx stelagent@latest assets search [-c code] [-i issuer] [-n testnet|pubnet] [--limit 10] [-f json|text]
+npx stelagent@latest assets orderbook -s <asset> -b <asset> [-n testnet|pubnet] [--limit 10] [-f json|text]
 ```
 
 Asset format: `native` for XLM, or `CODE:ISSUER` for custom assets.
@@ -201,7 +247,20 @@ Asset format: `native` for XLM, or `CODE:ISSUER` for custom assets.
 ## fee
 
 ```bash
-stelagent fee [-n testnet|pubnet] [-f json|text]
+npx stelagent@latest fee [-n testnet|pubnet] [-f json|text]
+```
+
+**Output:**
+
+```json
+{
+  "ok": true,
+  "data": {
+    "feeCharged": { "min": "100", "max": "100", "mode": "100", "p10": "100", ... },
+    "maxFee": { "min": "100", "max": "100", "mode": "100", ... },
+    "ledgerCapacity": "0.05"
+  }
+}
 ```
 
 ## monitor
@@ -209,7 +268,19 @@ stelagent fee [-n testnet|pubnet] [-f json|text]
 Stream real-time events. Ctrl+C to stop.
 
 ```bash
-stelagent monitor transactions <address> [-n testnet|pubnet] [--cursor now] [-f json|text]
-stelagent monitor payments <address> [same flags]
-stelagent monitor effects <address> [same flags]
+npx stelagent@latest monitor transactions <address> [-n testnet|pubnet] [--cursor now] [-f json|text]
+npx stelagent@latest monitor payments <address> [same flags]
+npx stelagent@latest monitor effects <address> [same flags]
 ```
+
+## mcp
+
+Start the MCP server on stdio for integration with AI clients.
+
+```bash
+npx stelagent@latest mcp
+```
+
+No flags. Communicates via JSON-RPC 2.0 over stdin/stdout. Logs to stderr.
+
+Exposes 15 tools across wallet, account, asset, and payment categories. Includes wallet_login and wallet_verify for full 1:1 CLI parity. See SKILL.md for the full tool surface.
