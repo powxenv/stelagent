@@ -16,7 +16,7 @@ export function GetStarted() {
             Any agent.
           </h2>
           <p className="text-muted text-lg leading-relaxed mb-8">
-            stecli ships an AGENTS.md that any AI can read and act on immediately. No setup, no
+            Stecli ships an AGENTS.md that any AI can read and act on immediately. No setup, no
             configuration. Just point your agent at it.
           </p>
           <AgentPromptBox />

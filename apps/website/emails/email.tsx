@@ -1,11 +1,11 @@
 import {
   Body,
-  Button,
   Container,
   Font,
   Head,
   Hr,
   Html,
+  Img,
   Preview,
   Section,
   Text,
@@ -30,7 +30,7 @@ export default function OtpEmail({ otp, email }: OtpEmailProps) {
           fontWeight={400}
         />
       </Head>
-      <Preview>Verify your wallet — your code is {otp}</Preview>
+      <Preview>Your Stecli verification code is {otp}</Preview>
       <Body
         style={{
           backgroundColor: "#0a0a0a",
@@ -48,6 +48,13 @@ export default function OtpEmail({ otp, email }: OtpEmailProps) {
           }}
         >
           <Section style={{ marginBottom: "40px" }}>
+            <Img
+              src="https://stecli.noval.me/stellar.svg"
+              alt="Stecli"
+              width="28"
+              height="28"
+              style={{ display: "inline-block", verticalAlign: "middle", marginRight: "10px" }}
+            />
             <Text
               style={{
                 fontSize: "22px",
@@ -55,9 +62,11 @@ export default function OtpEmail({ otp, email }: OtpEmailProps) {
                 color: "#ffffff",
                 margin: "0",
                 letterSpacing: "-0.02em",
+                display: "inline",
+                verticalAlign: "middle",
               }}
             >
-              SteCLI
+              Stecli
             </Text>
           </Section>
 
@@ -139,8 +148,8 @@ export default function OtpEmail({ otp, email }: OtpEmailProps) {
               }}
             >
               This code expires in{" "}
-              <span style={{ color: "#a0a0a0", fontWeight: 600 }}>5 minutes</span>. If you
-              didn&apos;t request this, you can safely ignore this email.
+              <span style={{ color: "#a0a0a0", fontWeight: 600 }}>5 minutes</span>. If you did not
+              request this, you can safely ignore this email.
             </Text>
           </Section>
 
@@ -161,7 +170,7 @@ export default function OtpEmail({ otp, email }: OtpEmailProps) {
                 lineHeight: "1.5",
               }}
             >
-              SteCLI — Agentic wallet verification
+              Stecli: Agent-first CLI for Stellar
             </Text>
             <Text
               style={{
@@ -171,7 +180,7 @@ export default function OtpEmail({ otp, email }: OtpEmailProps) {
                 lineHeight: "1.5",
               }}
             >
-              <Button
+              <a
                 href="https://stecli.noval.me"
                 style={{
                   color: "#333333",
@@ -180,7 +189,7 @@ export default function OtpEmail({ otp, email }: OtpEmailProps) {
                 }}
               >
                 stecli.noval.me
-              </Button>
+              </a>
             </Text>
           </Section>
         </Container>

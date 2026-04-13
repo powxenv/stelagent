@@ -5,7 +5,7 @@ export function Navbar() {
     <nav className="inner flex items-center justify-between py-6">
       <div className="flex items-center gap-2.5">
         <StecliLogo className="h-8 w-8" />
-        <span className="text-lg font-semibold tracking-tight text-foreground">stecli</span>
+        <span className="text-lg font-semibold tracking-tight text-foreground">Stecli</span>
       </div>
       <div className="flex items-center gap-6 text-sm text-muted">
         <a

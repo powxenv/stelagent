@@ -22,7 +22,7 @@ export function Hero() {
 
         <p className="text-lg md:text-xl text-muted leading-relaxed max-w-xl mb-10">
           Wallet, payments, markets, monitoring. All structured as agent skills. Point any AI at
-          stecli and it knows what to do.
+          Stecli and it knows what to do.
         </p>
       </div>
 
@@ -52,7 +52,7 @@ export function Hero() {
           <div className="flex gap-3">
             <span className="text-muted select-none">$</span>
             <span>
-              <span className="text-success">stecli</span> wallet balance
+              <span className="text-success">npx</span> stecli wallet balance
             </span>
           </div>
           <div className="flex gap-3 opacity-70">
@@ -65,13 +65,13 @@ export function Hero() {
           <div className="flex gap-3">
             <span className="text-muted select-none">$</span>
             <span>
-              <span className="text-success">stecli</span> account details GDXXX...
+              <span className="text-success">npx</span> stecli account details GDXXX...
             </span>
           </div>
           <div className="flex gap-3">
             <span className="text-muted select-none">$</span>
             <span>
-              <span className="text-success">stecli</span> pay https://api.example.com/premium
+              <span className="text-success">npx</span> stecli pay https://api.example.com/premium
             </span>
           </div>
         </div>

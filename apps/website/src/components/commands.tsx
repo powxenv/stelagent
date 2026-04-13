@@ -4,33 +4,43 @@ const commands = [
   {
     group: "wallet",
     items: [
-      { cmd: "stecli wallet login -e you@example.com", desc: "OTP login" },
-      { cmd: "stecli wallet balance", desc: "Check balances" },
-      { cmd: "stecli wallet transfer -t GDXXX... -a 10", desc: "Send XLM" },
-      { cmd: "stecli wallet logout", desc: "Clear session" },
+      { cmd: "npx stecli wallet login -e you@example.com", desc: "OTP login" },
+      { cmd: "npx stecli wallet address", desc: "Show public key" },
+      { cmd: "npx stecli wallet balance", desc: "Check balances" },
+      { cmd: "npx stecli wallet transfer -t GDXXX... -a 10", desc: "Send XLM" },
+      { cmd: "npx stecli wallet logout", desc: "Clear session" },
     ],
   },
   {
     group: "account",
     items: [
-      { cmd: "stecli account details <addr>", desc: "Account info" },
-      { cmd: "stecli account transactions <addr>", desc: "TX history" },
-      { cmd: "stecli account payments <addr>", desc: "Payment history" },
+      { cmd: "npx stecli account details <address>", desc: "Account info" },
+      { cmd: "npx stecli account transactions <address>", desc: "TX history" },
+      { cmd: "npx stecli account payments <address>", desc: "Payment history" },
+      { cmd: "npx stecli account effects <address>", desc: "Account effects" },
+    ],
+  },
+  {
+    group: "assets",
+    items: [
+      { cmd: "npx stecli assets search --code USDC", desc: "Search assets" },
+      { cmd: "npx stecli assets orderbook --selling XLM --buying USDC", desc: "Order book" },
     ],
   },
   {
     group: "actions",
     items: [
-      { cmd: "stecli send <dest> <amount> --asset native", desc: "Send payment" },
-      { cmd: "stecli pay https://api.example.com/premium", desc: "x402 micropayment" },
-      { cmd: "stecli fee", desc: "Current fee stats" },
+      { cmd: "npx stecli send <destination> <amount> --asset native", desc: "Send payment" },
+      { cmd: "npx stecli pay https://api.example.com/premium", desc: "x402 micropayment" },
+      { cmd: "npx stecli fee", desc: "Current fee stats" },
     ],
   },
   {
     group: "monitor",
     items: [
-      { cmd: "stecli monitor transactions <addr>", desc: "Stream TXs" },
-      { cmd: "stecli monitor payments <addr>", desc: "Stream payments" },
+      { cmd: "npx stecli monitor transactions <address>", desc: "Stream TXs" },
+      { cmd: "npx stecli monitor payments <address>", desc: "Stream payments" },
+      { cmd: "npx stecli monitor effects <address>", desc: "Stream effects" },
     ],
   },
 ];

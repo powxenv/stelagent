@@ -19,7 +19,7 @@ export const Route = createRootRoute<{
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "stecli: Agent-First CLI for Stellar",
+        title: "Stecli: Agent-First CLI for Stellar",
       },
     ],
     links: [
