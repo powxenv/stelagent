@@ -21,10 +21,12 @@ vp run dev
 ## CLI Quick Start
 
 ```bash
-stelagent wallet login -e you@example.com
-stelagent wallet balance
-stelagent wallet transfer -t GDXXX... -a 10
-stelagent pay https://api.example.com/premium
+stelagent wallet login -e you@example.com   # Interactive login
+stelagent wallet address                    # Show public key
+stelagent wallet balance                    # Show balances
+stelagent wallet transfer -t GDXXX... -a 10  # Send XLM
+stelagent send GDXXX... 100 -a USDC:GAXYZ...  # Send any asset
+stelagent pay https://api.example.com/premium  # X402 payment
 ```
 
 All commands output structured JSON:

@@ -6,6 +6,7 @@ import { assetsCommand } from "./commands/assets.js";
 import { sendCommand } from "./commands/send.js";
 import { feeCommand } from "./commands/fee.js";
 import { monitorCommand } from "./commands/monitor.js";
+import { mcpCommand } from "./commands/mcp.js";
 
 const mainCommand = defineCommand({
   meta: {
@@ -21,6 +22,7 @@ const mainCommand = defineCommand({
     send: sendCommand,
     fee: feeCommand,
     monitor: monitorCommand,
+    mcp: mcpCommand,
   },
 });
 

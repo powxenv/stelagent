@@ -13,6 +13,7 @@
     "prepare": "vp config"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "cli": "^1.0.1",
     "motion": "^12.38.0",
     "zod": "^4.3.6"
