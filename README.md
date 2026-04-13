@@ -144,7 +144,7 @@ Start the MCP server:
 npx stelagent@latest mcp
 ```
 
-In Claude Code, Cursor, or OpenCode, the agent can then do things like:
+In Claude Code, Cursor, Hermes Agent, OpenClaw, or OpenCode, the agent can then do things like:
 
 - "Check my wallet balance"
 - "Send 10 XLM to this address"
